@@ -34,8 +34,6 @@ Data is standardized into a common text/label format, split with stratified samp
 
 Training and evaluation with ModernBERT are underway, tracked with precision, recall, F1, macro F1, and per-class F1 — with extra attention on smaller categories so overall accuracy doesn't mask weak spots. On held-out predictions submitted to Kaggle, the model currently scores an **F1 of 0.641**.
 
-That's a meaningfully lower number than the internal validation run, and closing that gap is the current focus — the leading suspects are overlap between train and validation splits and a validation set that doesn't fully mirror the distribution the Kaggle test set draws from. Next step is auditing the split logic before doing any more hyperparameter tuning.
-
 Full run in `src/complaints-v2.ipynb`.
 
 ## Values Commitment
