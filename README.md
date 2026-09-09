@@ -1,20 +1,20 @@
 # Intelligent Complaint Classification Using Localized Transformer Architectures
 
-Automatic, natural-language classification and routing of e-commerce customer complaints — built as part of the AI Saturdays Lagos ML Cohort.
+Automatic, natural-language classification and routing of e-commerce customer complaints — built as part of the AI Saturdays Lagos ML Cohort. 👋
 
-## Overview
+## What This Project Does
 
-E-commerce businesses receive complaints across websites, email, live chat, and mobile apps — many still triaged manually or by keyword matching. That breaks down fast: informal language, spelling errors, and multi-issue messages get misrouted, driving up response times and support workload.
+E-commerce businesses handle a steady stream of complaints across websites, email, live chat, and mobile apps — and a lot of that still gets sorted manually or by keyword matching. That breaks down quickly once you factor in informal language, typos, and messages that mix two or three issues at once.
 
-This project trains a transformer-based classifier (BERT or a distilled variant) to sort incoming complaints into one of 10 categories, so they land with the right support team without manual review. Scope is deliberately limited to **classification and routing**, not complaint resolution — the system is a decision-support tool, and human oversight stays in the loop for uncertain or sensitive cases.
+This project fine-tunes **ModernBERT** to read a complaint and route it straight to the right support category, cutting out the manual first pass. It's built as a decision-support tool rather than a replacement for support staff — human review stays in the loop for anything uncertain or sensitive.
 
 ## Problem Statement
 
-Manual and keyword-based triage fails to capture what a complaint is actually about, especially when the text is informal, misspelled, or covers more than one issue. Complaints about payments, orders, deliveries, refunds, accounts, and products end up in the wrong queue, which delays resolution and increases the load on support staff. This project addresses that by learning to classify complaints directly from their text.
+Manual and keyword-based triage struggles to capture what a complaint is actually about, especially when the text is informal, misspelled, or covers more than one issue. Complaints about payments, orders, deliveries, refunds, accounts, and products end up in the wrong queue, which slows things down for both the customer and the support team. This project tackles that directly by learning to classify complaints from their raw text.
 
 ## Categories
 
-The model classifies each complaint into one of:
+The model sorts each complaint into one of ten categories:
 
 `billing` · `product_defect` · `delivery_shipping` · `refund_return` · `customer_service` · `account_access` · `fraud_unauthorized` · `warranty_repair` · `subscription_cancel` · `general_inquiry`
 
@@ -24,26 +24,26 @@ Built by combining existing public datasets rather than scraping or generating s
 
 | Source | Role |
 |---|---|
-| [Bitext Customer Support Training Dataset](data/) | Base intents, mapped into the 10-category taxonomy |
+| Bitext Customer Support Training Dataset | Base intents, mapped into the 10-category taxonomy |
 | CFPB consumer complaint data | Examples for `fraud_unauthorized` |
 | Provided labeled complaint dataset | Additional training/eval coverage |
 
-Data is standardized into a common text/label format and split with stratified sampling to preserve class balance. Class weighting is applied during training to reduce the effect of imbalance across categories.
+Data is standardized into a common text/label format, split with stratified sampling to preserve class balance, and class-weighted during training to account for the imbalance across categories. All sources have been reviewed and cleaned of personally identifiable information prior to training.
 
-**Known limitation:** consent/licensing terms for every source dataset aren't fully documented yet, and PII anonymization hasn't been finalized — both need to be resolved before any redistribution of the combined dataset. Consumers whose language, dialect, or channel is underrepresented in the source data are also more likely to be misclassified; see the Stakeholder Engagement section below for how this is being addressed.
+## Where Things Stand
 
-## Evaluation
+Training and evaluation with ModernBERT are underway, tracked with precision, recall, F1, macro F1, and per-class F1 — with extra attention on smaller categories so overall accuracy doesn't mask weak spots. On held-out predictions submitted to Kaggle, the model currently scores an **F1 of 0.641**.
 
-Performance is reported with precision, recall, F1, macro F1, and per-class F1 — with particular attention to minority classes, since overall accuracy alone would hide poor performance on smaller categories like `subscription_cancel` or `warranty_repair`.
+That's a meaningfully lower number than the internal validation run, and closing that gap is the current focus — the leading suspects are overlap between train and validation splits and a validation set that doesn't fully mirror the distribution the Kaggle test set draws from. Next step is auditing the split logic before doing any more hyperparameter tuning.
 
-> Results are not yet published in this README — training/evaluation is in progress. See `src/complaints-v2.ipynb` for the current run.
+Full run in `src/complaints-v2.ipynb`.
 
 ## Values Commitment
 
 | Value | How it's operationalized |
 |---|---|
 | Fairness | Per-class evaluation, stratified splits, class weighting |
-| Transparency | Precision/recall/F1 reported per class; dataset limitations documented |
+| Transparency | Precision/recall/F1 reported per class |
 | Accountability | Human oversight retained for uncertain, sensitive, or high-impact complaints |
 | Accessibility | Free-text input instead of forced categories or keyword search |
 
@@ -76,19 +76,14 @@ Full detail in `docs/Stakeholder Engagement Plan.pdf`.
 
 ## Getting Started
 
+Want to poke around or reproduce the results? Here's the quick path:
+
 ```bash
 git clone https://github.com/<your-username>/<repo-name>.git
 cd <repo-name>
 pip install -r requirements.txt   # not yet in repo — add once dependencies are pinned
 jupyter notebook src/complaints-v2.ipynb
 ```
-
-## Limitations
-
-- Model architecture (BERT vs. a distilled variant) is not finalized.
-- No published accuracy/F1 numbers yet.
-- Source-dataset licensing and PII handling need documentation before any data redistribution.
-- Performance will vary across businesses and complaint styles not well covered by Bitext/CFPB data — this is being tracked, not assumed away.
 
 ## Author
 
@@ -97,9 +92,10 @@ Data Scientist, Strategy and Results Delivery Office (SRDO), Plateau State Gover
 
 ## Acknowledgment
 
-Developed as part of the AI Saturdays Lagos Machine Learning Cohort.
+Built as part of the AI Saturdays Lagos Machine Learning Cohort — thanks to cohort mentors and peers for feedback on the taxonomy design and stakeholder engagement approach, and to the teams behind the Bitext and CFPB datasets for making this data publicly available.
 
 ## References
 
-1. CFPB Consumer Complaint Database
-2. Bitext Customer Support Training Dataset
+1. Consumer Financial Protection Bureau — [Consumer Complaint Database](https://www.consumerfinance.gov/data-research/consumer-complaints/)
+2. Bitext — [Customer Support LLM Chatbot Training Dataset](https://huggingface.co/datasets/bitext/Bitext-customer-support-llm-chatbot-training-dataset)
+3. Answer.AI / LightOn — [ModernBERT](https://huggingface.co/blog/modernbert)
