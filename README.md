@@ -1,4 +1,4 @@
-# Intelligent Complaint Classification Using Localized Transformer Architectures
+# Intelligent Complaint Classification Using Localized Transformer Architectures (E-Commerce)
 
 Automatic, natural-language classification and routing of e-commerce customer complaints — built as part of the AI Saturdays Lagos ML Cohort. 👋
 
@@ -30,7 +30,7 @@ Built by combining existing public datasets rather than scraping or generating s
 
 Data is standardized into a common text/label format, split with stratified sampling to preserve class balance, and class-weighted during training to account for the imbalance across categories. All sources have been reviewed and cleaned of personally identifiable information prior to training.
 
-## Where Things Stand
+## Results
 
 Training and evaluation with ModernBERT are underway, tracked with precision, recall, F1, macro F1, and per-class F1 — with extra attention on smaller categories so overall accuracy doesn't mask weak spots. On held-out predictions submitted to Kaggle, the model currently scores an **F1 of 0.641**.
 
