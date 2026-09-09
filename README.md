@@ -86,7 +86,7 @@ jupyter notebook src/complaints-v2.ipynb
 ## Author
 
 **Dape Alexander Naanret** ([Anzaksen](https://anzaksen.github.io))
-Data Scientist, Strategy and Results Delivery Office (SRDO), Plateau State Government
+Data Scientist.
 
 ## Acknowledgment
 
